@@ -16,8 +16,9 @@ export class Valentines2026 implements AfterViewInit {
   constructor() {}
 
   ngAfterViewInit(): void {
-    this.valentines_image.src = 'valentines_2026.jpg';
-    this.Initialize();
+    this.valentines_image.src = '/valentines/valentines_2026.jpg';
+    this.valentines_image.onload = () => this.Initialize();
+    // this.Initialize();
   }
 
   @HostListener('click', ['$event'])
@@ -40,20 +41,26 @@ export class Valentines2026 implements AfterViewInit {
       this.canvas_ref.nativeElement.clientWidth;
     this.canvas_ref.nativeElement.height =
       this.canvas_ref.nativeElement.clientHeight;
+    // this.ctx.drawImage(this.valentines_image, 0, 0);
   }
 
   @ViewChild('heart') heart_ref!: ElementRef<SVGElement>;
   @ViewChild('canvas') canvas_ref!: ElementRef<HTMLCanvasElement>;
 
   Initialize() {
-    this.ctx = this.canvas_ref.nativeElement.getContext('2d');
+    const context2d = this.canvas_ref.nativeElement.getContext('2d');
+    if (context2d) {
+      this.ctx = context2d;
+    }
     this.resize();
     const heart_string = new XMLSerializer().serializeToString(
       this.heart_ref.nativeElement
     );
     this.heart_image.src =
       'data:image/svg+xml;charset=utf8,' + encodeURIComponent(heart_string);
-
+    if (!this.ctx) {
+      return;
+    }
     for (let i = 0; i < this.particle_count; i++) {
       this.particles.push(
         new Particle(
@@ -65,17 +72,16 @@ export class Valentines2026 implements AfterViewInit {
         )
       );
     }
-    this.ctx!.drawImage(this.valentines_image, 0, 0);
+    const modifier = this.canvas_ref.nativeElement.height / this.valentines_image.height;
+    this.ctx.drawImage(this.valentines_image, 0, 0, this.valentines_image.width * modifier, this.canvas_ref.nativeElement.height);
     this.animate();
   }
 
   animate() {
-    if (!this.ctx) {
-      return;
-    }
-    this.ctx!.globalAlpha = 0.05;
-    this.ctx!.fillStyle = 'rgb(0, 0, 0)';
-    this.ctx!.fillRect(
+    console.log('animating')
+    this.ctx.globalAlpha = 0.05;
+    this.ctx.fillStyle = 'rgb(0, 0, 0)';
+    this.ctx.fillRect(
       0,
       0,
       this.canvas_ref.nativeElement.width,
@@ -85,10 +91,10 @@ export class Valentines2026 implements AfterViewInit {
       this.particles[i].update();
       this.particles[i].draw();
     }
-    requestAnimationFrame(this.animate);
+    requestAnimationFrame(() => this.animate);
   }
 
-  ctx: CanvasRenderingContext2D | null = null;
+  private ctx!: CanvasRenderingContext2D;
   heart_image = new Image();
   valentines_image = new Image();
 
@@ -99,7 +105,7 @@ export class Valentines2026 implements AfterViewInit {
 class Particle {
   constructor(
     canvas_dimensions: [number, number],
-    canvas_context: CanvasRenderingContext2D | null
+    canvas_context: CanvasRenderingContext2D
   ) {
     this.canvas_width = canvas_dimensions[0];
     this.canvas_height = canvas_dimensions[1];
@@ -118,18 +124,16 @@ class Particle {
     }
   }
   draw() {
-    if (!this.ctx) {
-      return;
-    }
     this.ctx.beginPath();
     this.ctx.fillStyle = 'white';
     this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     this.ctx.fill();
+    console.log('particle drawn')
   }
 
   canvas_width: number;
   canvas_height: number;
-  ctx: CanvasRenderingContext2D | null;
+  ctx: CanvasRenderingContext2D;
   x: number;
   y: number;
   speed: number;
