@@ -61,8 +61,9 @@
   />
 </svg>
 <canvas #canvas></canvas>
+@if (!is_my_valentine) {
 <div
-class="valentine_question_container"
+  class="valentine_question_container"
   style="
     position: absolute;
     top: 50%;
@@ -73,23 +74,43 @@ class="valentine_question_container"
     border-radius: 1rem;
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
   "
 >
-  <div style="color: rgb(220, 20, 103);font-size: large;">Will you be my valentine?</div>
+  <div style="color: rgb(220, 20, 103); font-size: large">
+    Will you be my valentine?
+  </div>
   <div
     style="
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      gap: .5rem;
+      gap: 0.5rem;
     "
   >
-    <button>Yes</button>
+    <button (click)="$event.stopPropagation(); is_my_valentine = true">
+      Yes
+    </button>
     <button>No</button>
-    <button class="maybe_button">
+    <button
+      class="maybe_button"
+      (click)="$event.stopPropagation(); is_my_valentine = true"
+    >
       <span>Maybe</span>
     </button>
   </div>
 </div>
+} @if (is_my_valentine) {
+<div class="controls" (click)="$event.stopPropagation()">
+  <!-- <input type="checkbox" [(ngModel)]="color_cycle" /> Cycle Background Color -->
+  <div (click)="color_cycle = !color_cycle">
+    {{ color_cycle ? "Stop Cycling" : "Cycle Background Color" }}
+  </div>
+  <div (click)="auto_remove_placed_hearts = !auto_remove_placed_hearts">
+    {{ auto_remove_placed_hearts ? "Stop Autoremoving Hearts" : "Auto Remove Placed Hearts" }}
+  </div>
+  <div (click)="export_images()">Export Images</div>
+  <div (click)="export_collage()">Export Collage</div>
+</div>
+}

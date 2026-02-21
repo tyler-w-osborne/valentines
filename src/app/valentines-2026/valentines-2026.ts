@@ -8,10 +8,12 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import JSZip from 'jszip';
 
 @Component({
   selector: 'app-valentines-2026',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './valentines-2026.html',
   styleUrl: './valentines-2026.scss',
 })
@@ -21,6 +23,8 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     // this.photobooth_image.src = '/valentines/2026/photobooth.jpg';
     // this.photobooth_image.onload = () => this.Initialize();
+    this.bubble_in_sound.load();
+    this.pop_sound.load();
     this.Initialize();
   }
 
@@ -40,14 +44,31 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
       event.clientX - rect.left - 50,
       event.clientY - rect.top - 50,
     ];
+    this.bubble_in_sound.play().catch((error) => {
+      console.error(
+        'Playback failed. Browsers usually require a user click first:',
+        error
+      );
+    });
     this.hearts_map.set(JSON.stringify([mouse_x, mouse_y]), null);
-    setTimeout(() => {
-      this.hearts_map.delete(JSON.stringify([mouse_x, mouse_y]));
-    }, 2000);
+    if (this.auto_remove_placed_hearts) {
+      setTimeout(() => {
+        this.pop_sound.play().catch((error) => {
+          console.error(
+            'Playback failed. Browsers usually require a user click first:',
+            error
+          );
+        });
+        this.hearts_map.delete(JSON.stringify([mouse_x, mouse_y]));
+      }, 2000);
+    }
     // if (this.ctx) {
     //   this.ctx.drawImage(this.heart_image, mouse_x, mouse_y);
     // }
   }
+
+  bubble_in_sound = new Audio('valentines/2026/bubble_in.mp3');
+  pop_sound = new Audio('valentines/2026/pop.mp3');
 
   hearts_map = new Map<string, null>();
 
@@ -66,6 +87,76 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
   @ViewChild('heart_red') heart_red_ref!: ElementRef<SVGElement>;
   @ViewChild('heart_cyan') heart_cyan_ref!: ElementRef<SVGElement>;
   @ViewChild('canvas') canvas_ref!: ElementRef<HTMLCanvasElement>;
+
+  // controls
+  is_my_valentine = false;
+  color_cycle = false;
+  auto_remove_placed_hearts = true;
+  async export_images() {
+    const zip = new JSZip();
+    const folder = zip.folder('');
+
+    let urls = [
+      'caught_sleeping.png',
+      'couple_that_fights.jpg',
+      'happy_tears.jpg',
+      'photobooth.jpg',
+      'too_bright.jpg',
+      'work_my_charms.jpg',
+      'zebra_ride.jpg',
+      'valentines_theme.jpg',
+      'mop.jpg',
+      'funny.png',
+    ];
+    // Create an array of fetch promises
+    const downloadPromises = urls.map(async (imageName) => {
+      const url = `/valentines/2026/${imageName}`;
+      const response = await fetch(url);
+      const blob = await response.blob();
+
+      // Extract filename from URL (e.g., "assets/cat.jpg" -> "cat.jpg")
+      const fileName = url.substring(url.lastIndexOf('/') + 1);
+
+      // Add file to the zip folder
+      folder?.file(fileName, blob);
+    });
+
+    // Wait for all images to be fetched and added
+    await Promise.all(downloadPromises);
+
+    // Generate the zip file and trigger download
+    const content = await zip.generateAsync({ type: 'blob' });
+    // 2. Create a temporary anchor element
+    const url = window.URL.createObjectURL(content);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = 'valentines_2026_images.zip'; // The name the file will save as
+
+    // 3. Trigger the download and cleanup
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+  export_collage() {
+    this.canvas_ref.nativeElement.toBlob((blob) => {
+      if (!blob) {
+        console.error('Canvas is empty or invalid');
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+
+      link.href = url;
+      link.download = 'valentines_2026_collage';
+
+      // 3. Trigger and cleanup
+      link.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  }
 
   async Initialize() {
     const context2d = this.canvas_ref.nativeElement.getContext('2d');
@@ -107,16 +198,27 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
           ],
           this.ctx,
           [this.pink_heart_image, this.red_heart_image, this.cyan_heart_image]
-          // [
-          //   this.photobooth_image.width * modifier,
-          //   this.canvas_ref.nativeElement.height,
-          // ]
         )
       );
     }
-
+    let background_color = 0; // 0-360 for hsl hue
     const runner = () => {
       this.ctx.clearRect(
+        0,
+        0,
+        this.canvas_ref.nativeElement.width,
+        this.canvas_ref.nativeElement.height
+      );
+      if (this.color_cycle) {
+        this.ctx.fillStyle = `hsl(${background_color}, 100%, 50%)`;
+        console.log(this.ctx.fillStyle);
+        // this.canvas_ref.nativeElement.style.backgroundColor = `hsl(${background_color}, 100%, 50%)`;
+        background_color++;
+        if (background_color > 720) {
+          background_color = 0;
+        }
+      }
+      this.ctx.fillRect(
         0,
         0,
         this.canvas_ref.nativeElement.width,
@@ -143,21 +245,13 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
       }
       for (const instance of this.hearts_map) {
         const coords: [number, number] = JSON.parse(instance[0]);
-        this.ctx.drawImage(
-          this.red_heart_image,
-          coords[0],
-          coords[1]
-        );
+        this.ctx.drawImage(this.red_heart_image, coords[0], coords[1]);
         this.ctx.drawImage(
           this.pink_heart_image,
           coords[0] + 25,
           coords[1] - 35
         );
-        this.ctx.drawImage(
-          this.cyan_heart_image,
-          coords[0],
-          coords[1] - 70
-        );
+        this.ctx.drawImage(this.cyan_heart_image, coords[0], coords[1] - 70);
       }
       // // photobooth
       // this.ctx.drawImage(
@@ -266,20 +360,10 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
   }
 
   animate() {
-    // console.log('animating');
-    // this.ctx.globalAlpha = 0.05;
-    // this.ctx.fillStyle = 'rgb(0, 0, 0)';
-    // this.ctx.fillRect(
-    //   0,
-    //   0,
-    //   this.canvas_ref.nativeElement.width,
-    //   this.canvas_ref.nativeElement.height
-    // );
     for (let i = 0; i < this.particles.length; i++) {
       this.particles[i].update();
       this.particles[i].draw();
     }
-    // requestAnimationFrame(() => this.animate);
   }
 
   private ctx!: CanvasRenderingContext2D;
@@ -327,10 +411,6 @@ class Particle {
     }
   }
   draw() {
-    // this.ctx.beginPath();
-    // this.ctx.fillStyle = 'white';
-    // this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    // this.ctx.fill();
     this.ctx.drawImage(
       this.selected_heart,
       this.x,
@@ -338,7 +418,6 @@ class Particle {
       this.selected_heart.width * this.size,
       this.selected_heart.height * this.size
     );
-    // console.log('particle drawn');
   }
 
   canvas_width: number;
@@ -349,40 +428,4 @@ class Particle {
   velocity: number;
   size: number;
   selected_heart: HTMLImageElement;
-  // photobooth_image_size: [number, number];
 }
-
-// class Manual_Heart {
-//   constructor(
-//     canvas_dimensions: [number, number],
-//     canvas_context: CanvasRenderingContext2D
-//   ) {
-//     this.canvas_width = canvas_dimensions[0];
-//     this.canvas_height = canvas_dimensions[1];
-//     this.ctx = canvas_context;
-//   }
-//   update() {
-//     this.y -= 10;
-//     if (this.y >= this.canvas_height) {
-//       this.x = Math.random() * this.canvas_width;
-//       this.y = Math.floor(Math.random() * (-500 - -750 + 1)) + -750;
-//     }
-//   }
-//   draw() {
-//     // this.ctx.beginPath();
-//     // this.ctx.fillStyle = 'white';
-//     // this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-//     // this.ctx.fill();
-//     this.ctx.drawImage(
-//       this.selected_heart,
-//       this.x,
-//       this.y,
-//       this.selected_heart.width * this.size,
-//       this.selected_heart.height * this.size
-//     );
-//   }
-
-//   canvas_width: number;
-//   canvas_height: number;
-//   ctx: CanvasRenderingContext2D;
-// }

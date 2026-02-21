@@ -10,8 +10,8 @@ canvas {
 }
 
 .valentine_question_container {
-    width: 10vw;
-    text-align: center;
+  width: 10vw;
+  text-align: center;
 }
 
 div.valentine_question_container:hover {
@@ -33,7 +33,26 @@ button.maybe_button:hover::after {
   content: "YES!!!";
 }
 
-
+div.controls {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 10vw;
+  right: 0;
+  top: calc(50% - 10vh);
+  > div {
+    width: 100%;
+    background-color: cyan;
+    color: black;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    cursor: pointer;
+    text-align: center;
+  }
+}
 
 // add export button for all photos
 // add export button for collage
