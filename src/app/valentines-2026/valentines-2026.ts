@@ -36,17 +36,20 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
   create_heart(event: MouseEvent) {
     console.log('Heart Created');
     const rect = this.canvas_ref.nativeElement.getBoundingClientRect();
-    const [mouse_x, mouse_y] = [
+    let [mouse_x, mouse_y] = [
       event.clientX - rect.left - 50,
       event.clientY - rect.top - 50,
     ];
-    this.hearts_map.set([mouse_x, mouse_y], null);
+    this.hearts_map.set(JSON.stringify([mouse_x, mouse_y]), null);
+    setTimeout(() => {
+      this.hearts_map.delete(JSON.stringify([mouse_x, mouse_y]));
+    }, 2000);
     // if (this.ctx) {
     //   this.ctx.drawImage(this.heart_image, mouse_x, mouse_y);
     // }
   }
 
-  hearts_map = new Map<[number, number], null>();
+  hearts_map = new Map<string, null>();
 
   @HostListener('resize')
   async resize() {
@@ -138,6 +141,24 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
           height
         );
       }
+      for (const instance of this.hearts_map) {
+        const coords: [number, number] = JSON.parse(instance[0]);
+        this.ctx.drawImage(
+          this.red_heart_image,
+          coords[0],
+          coords[1]
+        );
+        this.ctx.drawImage(
+          this.pink_heart_image,
+          coords[0] + 25,
+          coords[1] - 35
+        );
+        this.ctx.drawImage(
+          this.cyan_heart_image,
+          coords[0],
+          coords[1] - 70
+        );
+      }
       // // photobooth
       // this.ctx.drawImage(
       //   photobooth,
@@ -200,10 +221,10 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
         dy: 10,
         scale: 0.5,
       },
-      { image: 'happy_tears.jpg', dx: 30, dy: 5, scale: .5 },
+      { image: 'happy_tears.jpg', dx: 30, dy: 5, scale: 0.5 },
       { image: 'photobooth.jpg', dx: 0, dy: 0, scale: 1 }, // done
-      { image: 'too_bright.jpg', dx: 15, dy: 65, scale: .3 },
-      { image: 'work_my_charms.jpg', dx: 50, dy: 50, scale: .4 },
+      { image: 'too_bright.jpg', dx: 15, dy: 65, scale: 0.3 },
+      { image: 'work_my_charms.jpg', dx: 50, dy: 50, scale: 0.4 },
       {
         image: 'zebra_ride.jpg',
         dx: 100,
@@ -331,37 +352,37 @@ class Particle {
   // photobooth_image_size: [number, number];
 }
 
-class Manual_Heart {
-  constructor(
-    canvas_dimensions: [number, number],
-    canvas_context: CanvasRenderingContext2D
-  ) {
-    this.canvas_width = canvas_dimensions[0];
-    this.canvas_height = canvas_dimensions[1];
-    this.ctx = canvas_context;
-  }
-  update() {
-    this.y -= 10;
-    if (this.y >= this.canvas_height) {
-      this.x = Math.random() * this.canvas_width;
-      this.y = Math.floor(Math.random() * (-500 - -750 + 1)) + -750;
-    }
-  }
-  draw() {
-    // this.ctx.beginPath();
-    // this.ctx.fillStyle = 'white';
-    // this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    // this.ctx.fill();
-    this.ctx.drawImage(
-      this.selected_heart,
-      this.x,
-      this.y,
-      this.selected_heart.width * this.size,
-      this.selected_heart.height * this.size
-    );
-  }
+// class Manual_Heart {
+//   constructor(
+//     canvas_dimensions: [number, number],
+//     canvas_context: CanvasRenderingContext2D
+//   ) {
+//     this.canvas_width = canvas_dimensions[0];
+//     this.canvas_height = canvas_dimensions[1];
+//     this.ctx = canvas_context;
+//   }
+//   update() {
+//     this.y -= 10;
+//     if (this.y >= this.canvas_height) {
+//       this.x = Math.random() * this.canvas_width;
+//       this.y = Math.floor(Math.random() * (-500 - -750 + 1)) + -750;
+//     }
+//   }
+//   draw() {
+//     // this.ctx.beginPath();
+//     // this.ctx.fillStyle = 'white';
+//     // this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+//     // this.ctx.fill();
+//     this.ctx.drawImage(
+//       this.selected_heart,
+//       this.x,
+//       this.y,
+//       this.selected_heart.width * this.size,
+//       this.selected_heart.height * this.size
+//     );
+//   }
 
-  canvas_width: number;
-  canvas_height: number;
-  ctx: CanvasRenderingContext2D;
-}
+//   canvas_width: number;
+//   canvas_height: number;
+//   ctx: CanvasRenderingContext2D;
+// }

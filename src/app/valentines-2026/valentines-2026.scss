@@ -1,10 +1,39 @@
 :host {
-    position: relative;
+  position: relative;
 }
 
 canvas {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    background-color: black;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: black;
 }
+
+.valentine_question_container {
+    width: 10vw;
+    text-align: center;
+}
+
+div.valentine_question_container:hover {
+  :nth-child(2) {
+    display: none;
+  }
+}
+
+button {
+  width: 65px;
+  padding: 5px 10px;
+  user-select: none;
+}
+
+button.maybe_button:hover span {
+  display: none;
+}
+button.maybe_button:hover::after {
+  content: "YES!!!";
+}
+
+
+
+// add export button for all photos
+// add export button for collage
