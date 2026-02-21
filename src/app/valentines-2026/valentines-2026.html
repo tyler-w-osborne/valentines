@@ -89,13 +89,23 @@
       gap: 0.5rem;
     "
   >
-    <button (click)="$event.stopPropagation(); is_my_valentine = true;happy_valentines_day_hailee.play()">
+    <button
+      (click)="
+        $event.stopPropagation();
+        is_my_valentine = true;
+        happy_valentines_day_hailee.play()
+      "
+    >
       Yes
     </button>
     <button>No</button>
     <button
       class="maybe_button"
-      (click)="$event.stopPropagation(); is_my_valentine = true;happy_valentines_day_hailee.play()"
+      (click)="
+        $event.stopPropagation();
+        is_my_valentine = true;
+        happy_valentines_day_hailee.play()
+      "
     >
       <span>Maybe</span>
     </button>
@@ -108,7 +118,11 @@
     {{ color_cycle ? "Stop Cycling" : "Cycle Background Color" }}
   </div>
   <div (click)="auto_remove_placed_hearts = !auto_remove_placed_hearts">
-    {{ auto_remove_placed_hearts ? "Stop Autoremoving Hearts" : "Auto Remove Placed Hearts" }}
+    {{
+      auto_remove_placed_hearts
+        ? "Stop Autoremoving Hearts"
+        : "Auto Remove Placed Hearts"
+    }}
   </div>
   <div (click)="export_images()">Export Images</div>
   <div (click)="export_collage()">Export Collage</div>
