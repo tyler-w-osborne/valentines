@@ -89,13 +89,13 @@
       gap: 0.5rem;
     "
   >
-    <button (click)="$event.stopPropagation(); is_my_valentine = true">
+    <button (click)="$event.stopPropagation(); is_my_valentine = true;happy_valentines_day_hailee.play()">
       Yes
     </button>
     <button>No</button>
     <button
       class="maybe_button"
-      (click)="$event.stopPropagation(); is_my_valentine = true"
+      (click)="$event.stopPropagation(); is_my_valentine = true;happy_valentines_day_hailee.play()"
     >
       <span>Maybe</span>
     </button>

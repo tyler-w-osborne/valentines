@@ -23,6 +23,7 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     // this.photobooth_image.src = '/valentines/2026/photobooth.jpg';
     // this.photobooth_image.onload = () => this.Initialize();
+    this.happy_valentines_day_hailee.load();
     this.bubble_in_sound.load();
     this.pop_sound.load();
     this.Initialize();
@@ -69,6 +70,7 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
 
   bubble_in_sound = new Audio('valentines/2026/bubble_in.mp3');
   pop_sound = new Audio('valentines/2026/pop.mp3');
+  happy_valentines_day_hailee = new Audio('valentines/2026/happy_valentines_day_hailee.m4a');
 
   hearts_map = new Map<string, null>();
 
