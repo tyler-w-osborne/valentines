@@ -113,24 +113,6 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
     }
 
     const runner = () => {
-      // const caught_sleeping = this.asset_map.get('caught_sleeping.png')!;
-      // const couple_that_fights = this.asset_map.get(
-      //   'couple_that_fights.jpg'
-      // )!;
-      // const happy_tears = this.asset_map.get('happy_tears.jpg')!;
-      // const photobooth = this.asset_map.get('photobooth.jpg')!;
-      // const too_bright = this.asset_map.get('too_bright.jpg')!;
-      // const work_my_charms = this.asset_map.get('work_my_charms.jpg')!;
-      // const zebra_ride = this.asset_map.get('zebra_ride.jpg')!;
-
-      // caught_sleeping_image = new Image();
-      // couple_that_fights_image = new Image();
-      // happy_tears_image = new Image();
-      // photobooth_image = new Image();
-      // too_bright_image = new Image();
-      // work_my_charms_image = new Image();
-      // zebra_ride_image = new Image();
-
       this.ctx.clearRect(
         0,
         0,
@@ -221,12 +203,30 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
       { image: 'happy_tears.jpg', dx: 30, dy: 5, scale: .5 },
       { image: 'photobooth.jpg', dx: 0, dy: 0, scale: 1 }, // done
       { image: 'too_bright.jpg', dx: 15, dy: 65, scale: .3 },
-      // { image: 'work_my_charms.jpg', dx: 0, dy: 0, scale: .1 },
+      { image: 'work_my_charms.jpg', dx: 50, dy: 50, scale: .4 },
       {
         image: 'zebra_ride.jpg',
         dx: 100,
         dy: 0,
+        scale: 0.35,
+      }, // done
+      {
+        image: 'valentines_theme.jpg',
+        dx: 100,
+        dy: 100,
         scale: 0.3,
+      }, // done
+      {
+        image: 'mop.jpg',
+        dx: 30,
+        dy: 100,
+        scale: 0.3,
+      }, // done
+      {
+        image: 'funny.png',
+        dx: 15,
+        dy: 20,
+        scale: 0.25,
       }, // done
     ];
     for (let i = 0; i < asset_list.length; i++) {
@@ -329,4 +329,39 @@ class Particle {
   size: number;
   selected_heart: HTMLImageElement;
   // photobooth_image_size: [number, number];
+}
+
+class Manual_Heart {
+  constructor(
+    canvas_dimensions: [number, number],
+    canvas_context: CanvasRenderingContext2D
+  ) {
+    this.canvas_width = canvas_dimensions[0];
+    this.canvas_height = canvas_dimensions[1];
+    this.ctx = canvas_context;
+  }
+  update() {
+    this.y -= 10;
+    if (this.y >= this.canvas_height) {
+      this.x = Math.random() * this.canvas_width;
+      this.y = Math.floor(Math.random() * (-500 - -750 + 1)) + -750;
+    }
+  }
+  draw() {
+    // this.ctx.beginPath();
+    // this.ctx.fillStyle = 'white';
+    // this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    // this.ctx.fill();
+    this.ctx.drawImage(
+      this.selected_heart,
+      this.x,
+      this.y,
+      this.selected_heart.width * this.size,
+      this.selected_heart.height * this.size
+    );
+  }
+
+  canvas_width: number;
+  canvas_height: number;
+  ctx: CanvasRenderingContext2D;
 }
