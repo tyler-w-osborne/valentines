@@ -70,7 +70,9 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
 
   bubble_in_sound = new Audio('valentines/2026/bubble_in.mp3');
   pop_sound = new Audio('valentines/2026/pop.mp3');
-  happy_valentines_day_hailee = new Audio('valentines/2026/happy_valentines_day_hailee.m4a');
+  happy_valentines_day_hailee = new Audio(
+    'valentines/2026/happy_valentines_day_hailee.m4a'
+  );
 
   hearts_map = new Map<string, null>();
 
@@ -93,6 +95,17 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
   // controls
   is_my_valentine = false;
   color_cycle = false;
+  white_black: 'white' | 'black' = 'black';
+  set_white_black() {
+    this.color_cycle = false;
+    if (this.white_black === 'white') {
+      this.white_black = 'black';
+      this.ctx.fillStyle = `hsl(0, 100%, 0%)`;
+      return;
+    }
+    this.white_black = 'white';
+    this.ctx.fillStyle = `hsl(0, 100%, 100%)`;
+  }
   auto_remove_placed_hearts = true;
   async export_images() {
     const zip = new JSZip();
@@ -203,6 +216,11 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
         )
       );
     }
+  }
+
+  start_runner() {
+    this.is_my_valentine = true;
+    this.happy_valentines_day_hailee.play();
     let background_color = 0; // 0-360 for hsl hue
     const runner = () => {
       this.ctx.clearRect(
@@ -255,34 +273,6 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
         );
         this.ctx.drawImage(this.cyan_heart_image, coords[0], coords[1] - 70);
       }
-      // // photobooth
-      // this.ctx.drawImage(
-      //   photobooth,
-      //   0,
-      //   0,
-      //   photobooth.width *
-      //     (this.canvas_ref.nativeElement.height / photobooth.height),
-      //   this.canvas_ref.nativeElement.height
-      // );
-      // // zebra_ride
-      // // fix width and height later
-      // this.ctx.drawImage(
-      //   zebra_ride,
-      //   this.canvas_ref.nativeElement.width - zebra_ride.width / 5,
-      //   0,
-      //   zebra_ride.width / 5,
-      //   zebra_ride.height / 5
-      // );
-      // // couple_that_fights
-      // // fix width and height later
-      // this.ctx.drawImage(
-      //   couple_that_fights,
-      //   this.canvas_ref.nativeElement.width -
-      //     couple_that_fights.width / 5,
-      //   zebra_ride.height / 5,
-      //   couple_that_fights.width / 5,
-      //   couple_that_fights.height / 5
-      // );
       this.animate();
       this.animationframe_id = requestAnimationFrame(runner);
     };

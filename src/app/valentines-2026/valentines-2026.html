@@ -92,8 +92,7 @@
     <button
       (click)="
         $event.stopPropagation();
-        is_my_valentine = true;
-        happy_valentines_day_hailee.play()
+        start_runner()
       "
     >
       Yes
@@ -103,8 +102,7 @@
       class="maybe_button"
       (click)="
         $event.stopPropagation();
-        is_my_valentine = true;
-        happy_valentines_day_hailee.play()
+        start_runner()
       "
     >
       <span>Maybe</span>
@@ -114,8 +112,17 @@
 } @if (is_my_valentine) {
 <div class="controls" (click)="$event.stopPropagation()">
   <!-- <input type="checkbox" [(ngModel)]="color_cycle" /> Cycle Background Color -->
-  <div (click)="color_cycle = !color_cycle">
-    {{ color_cycle ? "Stop Cycling" : "Cycle Background Color" }}
+  <div
+    style="display: flex; align-items: center; justify-content: center"
+  >
+    <div (click)="color_cycle = !color_cycle">
+      {{ color_cycle ? "Stop Cycling" : "Cycle Background Color" }}
+    </div>
+    @if (color_cycle) {
+    <div (click)="set_white_black()">
+      {{ white_black === "white" ? "What about black?" : "What about white?" }}
+    </div>
+    }
   </div>
   <div (click)="auto_remove_placed_hearts = !auto_remove_placed_hearts">
     {{
