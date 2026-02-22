@@ -84,15 +84,22 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
 
   hearts_map = new Map<string, null>();
 
-  @HostListener('resize')
+  @HostListener('window:resize')
   async resize() {
-    console.log('resizing...');
     this.canvas_ref.nativeElement.width =
       this.canvas_ref.nativeElement.clientWidth;
     this.canvas_ref.nativeElement.height =
       this.canvas_ref.nativeElement.clientHeight;
+    if (this.particles.length > 0) {
+      this.particles.forEach((p) => {
+        p.canvas_width = this.canvas_ref.nativeElement.width;
+        p.canvas_height = this.canvas_ref.nativeElement.height;
+      });
+    }
+    if (this.ctx) {
+      this.ctx.imageSmoothingEnabled = true;
+    }
     // this.ctx.drawImage(this.photobooth_image, 0, 0);
-    await this.load_assets();
   }
 
   @ViewChild('heart_pink') heart_pink_ref!: ElementRef<SVGElement>;
@@ -182,6 +189,8 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
   }
 
   async Initialize() {
+    await this.load_assets();
+
     const context2d = this.canvas_ref.nativeElement.getContext('2d');
     if (context2d) {
       this.ctx = context2d;
