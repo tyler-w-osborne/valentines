@@ -10,7 +10,7 @@ canvas {
 }
 
 .valentine_question_container {
-  width: 10vw;
+  width: 10svw;
   text-align: center;
 }
 
@@ -40,9 +40,9 @@ div.controls {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  width: 10vw;
+  width: 10svw;
   right: 0;
-  top: calc(50% - 10vh);
+  top: calc(50% - 10svh);
   > div {
     width: 100%;
     background-color: cyan;
