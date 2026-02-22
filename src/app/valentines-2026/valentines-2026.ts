@@ -125,7 +125,7 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
     ];
     // Create an array of fetch promises
     const downloadPromises = urls.map(async (imageName) => {
-      const url = `/valentines/2026/${imageName}`;
+      const url = `valentines/2026/${imageName}`;
       const response = await fetch(url);
       const blob = await response.blob();
 
@@ -338,7 +338,7 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
     ];
     for (let i = 0; i < asset_list.length; i++) {
       const _image = new Image();
-      _image.src = `/valentines/2026/${asset_list[i].image}`;
+      _image.src = `valentines/2026/${asset_list[i].image}`;
       await _image.decode();
       let value = {
         image: _image,
