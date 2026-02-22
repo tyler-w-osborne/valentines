@@ -16,7 +16,7 @@ canvas {
 
 div.valentine_question_container:hover {
   :nth-child(2) {
-    display: none;
+    visibility: hidden;
   }
 }
 
@@ -27,7 +27,7 @@ button {
 }
 
 button.maybe_button:hover span {
-  visibility: hidden;
+  display: none;
 }
 button.maybe_button:hover::after {
   content: "YES!!!";
