@@ -10,12 +10,23 @@ canvas {
 }
 
 .valentine_question_container {
-  width: 10svw;
   text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  background-color: cyan;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: max-content;
+  max-width: 90svw;
 }
 
 div.valentine_question_container:hover {
-  :nth-child(2) {
+  :nth-child(2) :nth-child(2) {
     visibility: hidden;
   }
 }
