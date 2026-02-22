@@ -51,6 +51,13 @@ div.controls {
     padding: 1rem;
     cursor: pointer;
     text-align: center;
+
+    > div {
+      background-color: #2e9191;
+      border-radius: 0.25rem;
+      padding: 0.5rem;
+      color: white;
+    }
   }
 }
 

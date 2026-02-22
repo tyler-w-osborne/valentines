@@ -39,7 +39,7 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
 
   @HostListener('click', ['$event'])
   create_heart(event: MouseEvent) {
-    console.log('Heart Created');
+    // console.log('Heart Created');
     const rect = this.canvas_ref.nativeElement.getBoundingClientRect();
     let [mouse_x, mouse_y] = [
       event.clientX - rect.left - 50,
@@ -231,7 +231,7 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
       );
       if (this.color_cycle) {
         this.ctx.fillStyle = `hsl(${background_color}, 100%, 50%)`;
-        console.log(this.ctx.fillStyle);
+        // console.log(this.ctx.fillStyle);
         // this.canvas_ref.nativeElement.style.backgroundColor = `hsl(${background_color}, 100%, 50%)`;
         background_color++;
         if (background_color > 720) {
