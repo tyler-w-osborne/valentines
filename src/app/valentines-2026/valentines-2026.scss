@@ -27,7 +27,7 @@ button {
 }
 
 button.maybe_button:hover span {
-  display: none;
+  visibility: hidden;
 }
 button.maybe_button:hover::after {
   content: "YES!!!";
