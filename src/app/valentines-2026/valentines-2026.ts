@@ -37,8 +37,8 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
 
   private ngZone = inject(NgZone);
 
-  @HostListener('click', ['$event'])
-  create_heart(event: MouseEvent) {
+  @HostListener('pointerdown', ['$event'])
+  create_heart(event: PointerEvent) {
     // console.log('Heart Created');
     const rect = this.canvas_ref.nativeElement.getBoundingClientRect();
     let [mouse_x, mouse_y] = [
@@ -66,6 +66,11 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
     // if (this.ctx) {
     //   this.ctx.drawImage(this.heart_image, mouse_x, mouse_y);
     // }
+  }
+
+  @HostListener('contextmenu', ['$event'])
+  stop_right_click_menu(event: MouseEvent) {
+    event.preventDefault();
   }
 
   bubble_in_sound = new Audio('valentines/2026/bubble_in.mp3');

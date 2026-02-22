@@ -75,18 +75,18 @@
       gap: 0.5rem;
     "
   >
-    <button (click)="$event.stopPropagation(); start_runner()">Yes</button>
+    <button (pointerdown)="$event.stopPropagation(); start_runner()">Yes</button>
     <button>No</button>
     <button
       class="maybe_button"
-      (click)="$event.stopPropagation(); start_runner()"
+      (pointerdown)="$event.stopPropagation(); start_runner()"
     >
       <span>Maybe</span>
     </button>
   </div>
 </div>
 } @if (is_my_valentine) {
-<div class="controls" (click)="$event.stopPropagation()">
+<div class="controls" (pointerdown)="$event.stopPropagation()">
   <!-- <input type="checkbox" [(ngModel)]="color_cycle" /> Cycle Background Color -->
   <div
     style="
@@ -96,23 +96,23 @@
       gap: 0.75rem;
     "
   >
-    <div (click)="color_cycle = !color_cycle">
+    <div (pointerdown)="color_cycle = !color_cycle">
       {{ color_cycle ? "Stop Cycling" : "Cycle Background Color" }}
     </div>
     @if (color_cycle) {
-    <div (click)="set_white_black()">
+    <div (pointerdown)="set_white_black()">
       {{ white_black === "white" ? "What about black?" : "What about white?" }}
     </div>
     }
   </div>
-  <div (click)="auto_remove_placed_hearts = !auto_remove_placed_hearts">
+  <div (pointerdown)="auto_remove_placed_hearts = !auto_remove_placed_hearts">
     {{
       auto_remove_placed_hearts
         ? "Stop Autoremoving Hearts"
         : "Auto Remove Placed Hearts"
     }}
   </div>
-  <div (click)="export_images()">Export Images</div>
-  <div (click)="export_collage()">Export Collage</div>
+  <div (pointerdown)="export_images()">Export Images</div>
+  <div (pointerdown)="export_collage()">Export Collage</div>
 </div>
 }
