@@ -40,6 +40,9 @@ export class Valentines2026 implements AfterViewInit, OnDestroy {
   @HostListener('pointerdown', ['$event'])
   create_heart(event: PointerEvent) {
     // console.log('Heart Created');
+    if (!this.is_my_valentine) {
+      return;
+    }
     const rect = this.canvas_ref.nativeElement.getBoundingClientRect();
     let [mouse_x, mouse_y] = [
       event.clientX - rect.left - 50,
